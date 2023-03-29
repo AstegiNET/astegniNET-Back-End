@@ -7,9 +7,13 @@ const User = require("../models/userModel");
 // @route   GET /api/courses
 // @access  Private
 const getCourses = asyncHandler(async (req, res) => {
-  const courses = await Course.find({ user: req.user.id });
+  if (req.user) {
+    const courses = await Course.find({ user: req.user.id });
 
-  res.status(200).json(courses);
+    res.status(200).json(courses);
+  } else {
+    throw new Error("Please login to view courses");
+  }
 });
 
 // @desc    Set course
