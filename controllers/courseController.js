@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const Course = require("../models/courseModel");
-const User = require("../models/userModel");
+const User = require("../models/tutorModel");
 
 // @desc    Get courses
 // @route   GET /api/courses
