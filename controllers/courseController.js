@@ -16,6 +16,17 @@ const getCourses = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get courses
+// @route   GET /api/course
+// @access  Private
+const getAllCourses = asyncHandler(async (req, res) => {
+  const courses = await Course.find();
+  if (!courses) {
+    throw new Error("No courses");
+  }
+  res.status(200).json(courses);
+});
+
 // @desc    Set course
 // @route   POST /api/courses
 // @access  Private
@@ -100,6 +111,7 @@ const deleteCourse = asyncHandler(async (req, res) => {
 
 module.exports = {
   getCourses,
+  getAllCourses,
   setCourse,
   updateCourse,
   deleteCourse,
