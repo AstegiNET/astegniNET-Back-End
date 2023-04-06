@@ -75,13 +75,6 @@ const loginTutee = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Get tutee data
-// @route   GET /api/tutees/me
-// @access  Private
-const getMe = asyncHandler(async (req, res) => {
-  res.status(200).json(req.tutee);
-});
-
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -92,5 +85,4 @@ const generateToken = (id) => {
 module.exports = {
   registerTutee,
   loginTutee,
-  getMe,
 };

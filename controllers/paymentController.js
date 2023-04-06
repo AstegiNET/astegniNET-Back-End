@@ -10,10 +10,10 @@ const base_url = "https://api.chapa.co/v1/transaction/initialize";
 
 //initialize payment
 const InitializePayent = async (req, res) => {
-  const data = req.body;
+  const inputData = req.body;
 
   await axios
-    .post(base_url, data, {
+    .post(base_url, inputData, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -24,7 +24,10 @@ const InitializePayent = async (req, res) => {
       console.log(response.data.data);
       res.send(JSON.stringify(response.data.data));
     })
-    .catch((err) => console.log(err));
+    .catch((err) => {
+      console.log(err);
+      res.send(err.message);
+    });
 };
 
 module.exports = { InitializePayent };
