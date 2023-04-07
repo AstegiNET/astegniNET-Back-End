@@ -25,5 +25,6 @@ app.use("/videocall", require("./routes/videoRoute"));
 app.use(errorHandler);
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on port: ${port}`);
+  console.log(`Server is running on port: ${process.env.MGDB}`);
+  // console.log(`Server is running on port: ${port}`);
 });
