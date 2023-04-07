@@ -41,6 +41,7 @@ const verify = async (req, res) => {
   await axios
     .get(verify_url + req.params.id, config)
     .then((response) => {
+      res.send(response.data);
       console.log(response.data);
     })
     .catch((err) => console.log("Payment can't be verfied", err));
