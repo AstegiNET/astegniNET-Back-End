@@ -21,7 +21,7 @@ const registerTutor = asyncHandler(async (req, res) => {
     password,
   } = req.body;
 
-  if (!fname || !lname || !phone || !email || !password || !salary) {
+  if (!fname || !lname || !phone || !email || !password || !salary || !course) {
     res.status(400);
     throw new Error("Please add all fields");
   }
@@ -89,6 +89,11 @@ const loginTutor = asyncHandler(async (req, res) => {
       email: tutor.email,
       phone: tutor.phone,
       role: tutor.role,
+      salary: tutor.salary,
+      course: tutor.course,
+      rating: tutor.rating,
+      isQualified: tutor.isQualified,
+      tutee: tutor.tutee,
       token: generateToken(tutor._id),
     });
   } else {
