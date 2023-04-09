@@ -7,9 +7,21 @@ const Tutor = require("../models/tutorModel");
 // @route   POST /api/tutors
 // @access  Public
 const registerTutor = asyncHandler(async (req, res) => {
-  const { fname, lname, phone, email, role, password } = req.body;
+  const {
+    fname,
+    lname,
+    phone,
+    email,
+    role,
+    salary,
+    isQualified,
+    course,
+    tutee,
+    rating,
+    password,
+  } = req.body;
 
-  if (!fname || !lname || !phone || !email || !password) {
+  if (!fname || !lname || !phone || !email || !password || !salary) {
     res.status(400);
     throw new Error("Please add all fields");
   }
@@ -33,6 +45,11 @@ const registerTutor = asyncHandler(async (req, res) => {
     phone,
     email,
     role,
+    salary,
+    isQualified,
+    course,
+    tutee,
+    rating,
     password: hashedPassword,
   });
 
@@ -44,6 +61,11 @@ const registerTutor = asyncHandler(async (req, res) => {
       email: tutor.email,
       phone: tutor.phone,
       role: tutor.role,
+      salary: tutor.salary,
+      course: tutor.course,
+      rating: tutor.rating,
+      isQualified: tutor.isQualified,
+      tutee: tutor.tutee,
       token: generateToken(tutor._id),
     });
   } else {

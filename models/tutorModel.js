@@ -24,9 +24,10 @@ const userSchema = mongoose.Schema(
       default: "tutor",
       required: [true, "Please select a role"],
     },
+
     salary: {
       type: Number,
-      required: [true, "please add salary"],
+      required: true,
     },
     isQualified: {
       type: Boolean,
@@ -44,6 +45,7 @@ const userSchema = mongoose.Schema(
     },
     rating: {
       type: Number,
+      default: 1,
       min: 1,
       max: 10,
     },
