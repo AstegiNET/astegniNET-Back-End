@@ -36,6 +36,7 @@ const userSchema = mongoose.Schema(
     course: {
       type: [mongoose.Schema.Types.ObjectId],
       required: [true, "Please select a course"],
+      ref: "Course",
     },
     tutee: {
       type: [mongoose.Schema.Types.ObjectId],
