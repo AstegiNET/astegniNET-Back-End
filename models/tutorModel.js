@@ -21,9 +21,32 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["tutor"],
+      default: "tutor",
       required: [true, "Please select a role"],
     },
+    salary: {
+      type: Number,
+      required: [true, "please add salary"],
+    },
+    isQualified: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    course: {
+      type: [mongoose.Schema.Types.ObjectId],
+      required: [true, "Please select a course"],
+    },
+    tutee: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Tutee",
+    },
+    rating: {
+      type: Number,
+      min: 1,
+      max: 10,
+    },
+
     password: {
       type: String,
       required: [true, "Please add a password"],

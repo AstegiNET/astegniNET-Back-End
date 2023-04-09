@@ -21,8 +21,11 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["tutee"],
+      default: "tutee",
       required: [true, "Please select a role"],
+    },
+    tutor: {
+      type: [mongoose.Schema.Types.ObjectId],
     },
     password: {
       type: String,
