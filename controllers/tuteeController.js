@@ -7,7 +7,7 @@ const Tutee = require("../models/tuteeModel");
 // @route   POST /api/tutees
 // @access  Public
 const registerTutee = asyncHandler(async (req, res) => {
-  const { fname, lname, phone, email, role, password, tutor } = req.body;
+  const { fname, lname, phone, email, role, password, enrolled } = req.body;
 
   if (!fname || !lname || !phone || !email || !password) {
     res.status(400);
@@ -33,7 +33,6 @@ const registerTutee = asyncHandler(async (req, res) => {
     phone,
     email,
     role,
-    tutor,
     password: hashedPassword,
   });
 

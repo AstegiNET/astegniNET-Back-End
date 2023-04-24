@@ -24,10 +24,26 @@ const userSchema = mongoose.Schema(
       default: "tutee",
       required: [true, "Please select a role"],
     },
+    course: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Course",
+    },
     tutor: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Tutor",
     },
+    enrolled: [
+      {
+        tutor: {
+          type: [mongoose.Schema.Types.ObjectId],
+          ref: "Tutor",
+        },
+        course: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Course",
+        },
+      },
+    ],
     password: {
       type: String,
       required: [true, "Please add a password"],
