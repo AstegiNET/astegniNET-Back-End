@@ -53,6 +53,32 @@ const registerTutee = asyncHandler(async (req, res) => {
   }
 });
 
+//update tutee
+//@desc PUT /api/tutees/update/:id
+
+const updateTutee = async (req, res, next) => {
+  try {
+    var hash;
+    if (req.body.password) {
+      const salt = bcrypt.genSaltSync(10);
+      hash = bcrypt.hashSync(req.body.password, salt);
+    } else {
+      hash = await Tutee.findById(req.params.id).password;
+    }
+
+    const updatedTutee = await Tutee.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body, password: hash },
+      { new: true }
+    );
+    res.status(200).json(updatedTutee);
+  } catch (err) {
+    next(err);
+  }
+
+  console.log("update user");
+};
+
 // @desc    Authenticate a tutee
 // @route   POST /api/tutees/login
 // @access  Public
@@ -86,5 +112,6 @@ const generateToken = (id) => {
 
 module.exports = {
   registerTutee,
+  updateTutee,
   loginTutee,
 };
