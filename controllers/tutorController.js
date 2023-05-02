@@ -2,24 +2,14 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
 const Tutor = require("../models/tutorModel");
+const Course = require("../models/courseModel");
 
 // @desc    Register new tutor
 // @route   POST /api/tutors
 // @access  Public
 const registerTutor = asyncHandler(async (req, res) => {
-  const {
-    fname,
-    lname,
-    phone,
-    email,
-    role,
-    salary,
-    isQualified,
-    course,
-    tutee,
-    rating,
-    password,
-  } = req.body;
+  const { fname, lname, phone, email, salary, course, rating, password } =
+    req.body;
 
   if (!fname || !lname || !phone || !email || !password || !salary || !course) {
     res.status(400);
@@ -40,32 +30,13 @@ const registerTutor = asyncHandler(async (req, res) => {
 
   // Create tutor
   const tutor = await Tutor.create({
-    fname,
-    lname,
-    phone,
-    email,
-    role,
-    salary,
-    isQualified,
-    course,
-    tutee,
-    rating,
+    ...req.body,
     password: hashedPassword,
   });
 
   if (tutor) {
     res.status(201).json({
-      _id: tutor.id,
-      fname: tutor.fname,
-      lname: tutor.lname,
-      email: tutor.email,
-      phone: tutor.phone,
-      role: tutor.role,
-      salary: tutor.salary,
-      course: tutor.course,
-      rating: tutor.rating,
-      isQualified: tutor.isQualified,
-      tutee: tutor.tutee,
+      ...tutor._doc,
       token: generateToken(tutor._id),
     });
   } else {
@@ -79,26 +50,41 @@ const registerTutor = asyncHandler(async (req, res) => {
 // @access  Public
 const loginTutor = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  // Check for tutor email
   const tutor = await Tutor.findOne({ email });
   if (tutor && (await bcrypt.compare(password, tutor.password))) {
     res.json({
-      _id: tutor.id,
-      fname: tutor.fname,
-      lname: tutor.lname,
-      email: tutor.email,
-      phone: tutor.phone,
-      role: tutor.role,
-      salary: tutor.salary,
-      course: tutor.course,
-      rating: tutor.rating,
-      isQualified: tutor.isQualified,
-      tutee: tutor.tutee,
+      ...tutor._doc,
       token: generateToken(tutor._id),
     });
   } else {
     res.status(400);
     throw new Error("Invalid credentials");
+  }
+});
+
+//get tutors
+const getTutor = asyncHandler(async (req, res) => {
+  const { fname, rating, course } = req.query;
+  let allTutors = [];
+  try {
+    const regex = new RegExp(course, "i");
+    const results = await Course.find({ name: { $regex: regex } });
+
+    if (results.length && fname && rating) {
+      for (let i = 0; i < results.length; i++) {
+        const tutor = await Tutor.findOne({
+          fname: fname,
+          course: results[i]._id,
+          rating: rating,
+        });
+
+        allTutors.push(tutor);
+      }
+    }
+    console.log(allTutors.length);
+    res.status(200).send(allTutors);
+  } catch (err) {
+    next(err);
   }
 });
 
@@ -112,4 +98,5 @@ const generateToken = (id) => {
 module.exports = {
   registerTutor,
   loginTutor,
+  getTutor,
 };

@@ -2,12 +2,11 @@ const mongoose = require("mongoose");
 
 const courseSchema = mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: "Tutor",
+    name: {
+      type: String,
+      required: [true, "Please add a text value"],
     },
-    text: {
+    level: {
       type: String,
       required: [true, "Please add a text value"],
     },

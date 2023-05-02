@@ -31,14 +31,16 @@ const getAllCourses = asyncHandler(async (req, res) => {
 // @route   POST /api/courses
 // @access  Private
 const setCourse = asyncHandler(async (req, res) => {
-  if (!req.body.text) {
+  const { name, level } = req.body;
+
+  if (!name || !level) {
     res.status(400);
-    throw new Error("Please add a text field");
+    throw new Error("Please add all fields");
   }
 
   const course = await Course.create({
-    text: req.body.text,
-    user: req.user.id,
+    name: name,
+    level: level,
   });
 
   res.status(200).json(course);
