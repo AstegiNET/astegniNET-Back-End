@@ -63,6 +63,18 @@ const loginTutor = asyncHandler(async (req, res) => {
   }
 });
 
+//get tutor
+const getTutor = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const tutor = await Tutor.findById(id);
+    res.status(200).send(tutor);
+  } catch (err) {
+    next(err);
+  }
+});
+
 //get tutors
 const getTutors = asyncHandler(async (req, res) => {
   const { fname, rating, course } = req.query;
@@ -196,6 +208,7 @@ const generateToken = (id) => {
 module.exports = {
   registerTutor,
   loginTutor,
+  getTutor,
   getTutors,
   getTutorbyRating,
   getTutorbyName,
