@@ -66,24 +66,117 @@ const loginTutor = asyncHandler(async (req, res) => {
 //get tutors
 const getTutor = asyncHandler(async (req, res) => {
   const { fname, rating, course } = req.query;
-  let allTutors = [];
+
   try {
     const regex = new RegExp(course, "i");
-    const results = await Course.find({ name: { $regex: regex } });
+    const courses = await Course.find({ name: { $regex: regex } });
+    const tutors = await Promise.all(
+      courses.map((course) => {
+        return Tutor.find({ fname, rating, course: course._id });
+      })
+    );
+    let allTutors = tutors.filter((tutor) => tutor.length !== 0).flat();
 
-    if (results.length && fname && rating) {
-      for (let i = 0; i < results.length; i++) {
-        const tutor = await Tutor.findOne({
-          fname: fname,
-          course: results[i]._id,
-          rating: rating,
-        });
+    let new_tutors = [];
+    for (let i = 0; i < allTutors.length; i++) {
+      const courseName = await Course.findOne({ _id: allTutors[i].course });
 
-        allTutors.push(tutor);
-      }
+      new_tutors.push({
+        fname: allTutors[i].fname,
+        lname: allTutors[i].lname,
+        rating: allTutors[i].rating,
+        courseName: courseName.name,
+        courseLevel: courseName.level,
+      });
     }
-    console.log(allTutors.length);
-    res.status(200).send(allTutors);
+
+    res.status(200).send(new_tutors);
+  } catch (err) {
+    next(err);
+  }
+});
+
+//get tutors
+const getTutorbyName = asyncHandler(async (req, res) => {
+  const { fname } = req.query;
+
+  try {
+    const regex = new RegExp(fname, "i");
+    const allTutors = await Tutor.find({ fname: { $regex: regex } });
+
+    let new_tutors = [];
+    for (let i = 0; i < allTutors.length; i++) {
+      const courseName = await Course.findOne({ _id: allTutors[i].course });
+
+      new_tutors.push({
+        fname: allTutors[i].fname,
+        lname: allTutors[i].lname,
+        rating: allTutors[i].rating,
+        courseName: courseName.name,
+        courseLevel: courseName.level,
+      });
+    }
+
+    res.status(200).send(new_tutors);
+  } catch (err) {
+    next(err);
+  }
+});
+
+const getTutorbyRating = asyncHandler(async (req, res) => {
+  const { rating } = req.query;
+
+  try {
+    const tutors = await Tutor.find();
+    const allTutors = tutors.filter((tutor) => tutor.rating >= rating);
+
+    let new_tutors = [];
+    for (let i = 0; i < allTutors.length; i++) {
+      const courseName = await Course.findOne({ _id: allTutors[i].course });
+
+      new_tutors.push({
+        fname: allTutors[i].fname,
+        lname: allTutors[i].lname,
+        rating: allTutors[i].rating,
+        courseName: courseName.name,
+        courseLevel: courseName.level,
+      });
+    }
+
+    res.status(200).send(new_tutors);
+  } catch (err) {
+    next(err);
+  }
+});
+
+const getTutorbyCourse = asyncHandler(async (req, res) => {
+  const { course } = req.query;
+
+  try {
+    const regex = new RegExp(course, "i");
+    const courses = await Course.find({ name: { $regex: regex } });
+
+    const tutors = await Promise.all(
+      courses.map((course) => {
+        return Tutor.find({ course: course._id });
+      })
+    );
+    let allTutors = tutors.filter((tutor) => tutor.length !== 0).flat();
+
+    let new_tutors = [];
+    for (let i = 0; i < allTutors.length; i++) {
+      const courseName = await Course.findOne({ _id: allTutors[i].course });
+
+      new_tutors.push({
+        fname: allTutors[i].fname,
+        lname: allTutors[i].lname,
+        rating: allTutors[i].rating,
+        courseName: courseName.name,
+        courseLevel: courseName.level,
+      });
+    }
+
+    res.status(200).send(new_tutors);
   } catch (err) {
     next(err);
   }
@@ -100,4 +193,7 @@ module.exports = {
   registerTutor,
   loginTutor,
   getTutor,
+  getTutorbyRating,
+  getTutorbyName,
+  getTutorbyCourse,
 };
