@@ -1,8 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const { registerTutee, loginTutee } = require("../controllers/tuteeController");
+const {
+  registerTutee,
+  loginTutee,
+  updateTutee,
+} = require("../controllers/tuteeController");
+const { protectTutee } = require("../middleware/authMiddleware");
 
 router.post("/register", registerTutee);
 router.post("/login", loginTutee);
+router.put("/updateprofile/:id", protectTutee, updateTutee);
 
 module.exports = router;

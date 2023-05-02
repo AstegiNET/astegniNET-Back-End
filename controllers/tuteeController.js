@@ -75,8 +75,6 @@ const updateTutee = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-
-  console.log("update user");
 };
 
 // @desc    Authenticate a tutee
