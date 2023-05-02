@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       default: "tutee",
-      required: [true, "Please select a role"],
+      // required: [true, "Please select a role"],
     },
 
     enrolled: [

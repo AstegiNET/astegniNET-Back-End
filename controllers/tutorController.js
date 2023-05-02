@@ -11,7 +11,8 @@ const registerTutor = asyncHandler(async (req, res) => {
   const { fname, lname, phone, email, salary, course, rating, password } =
     req.body;
 
-  if (!fname || !lname || !phone || !email || !password || !salary || !course) {
+  if (!fname || !lname || !phone || !email || !password || !salary) {
+    //  || !course
     res.status(400);
     throw new Error("Please add all fields");
   }
