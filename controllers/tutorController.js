@@ -89,7 +89,7 @@ const getTutor = asyncHandler(async (req, res) => {
         courseLevel: courseName.level,
       });
     }
-    console.log("success");
+
     res.status(200).send(new_tutors);
   } catch (err) {
     next(err);
