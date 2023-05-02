@@ -64,15 +64,19 @@ const loginTutor = asyncHandler(async (req, res) => {
 });
 
 //get tutors
-const getTutor = asyncHandler(async (req, res) => {
+const getTutors = asyncHandler(async (req, res) => {
   const { fname, rating, course } = req.query;
+  const query = {};
+  if (fname) query.fname = fname;
+  if (rating) query.rating = rating;
 
   try {
     const regex = new RegExp(course, "i");
     const courses = await Course.find({ name: { $regex: regex } });
     const tutors = await Promise.all(
       courses.map((course) => {
-        return Tutor.find({ fname, rating, course: course._id });
+        if (course) query.course = course._id;
+        return Tutor.find(query);
       })
     );
     let allTutors = tutors.filter((tutor) => tutor.length !== 0).flat();
@@ -192,7 +196,7 @@ const generateToken = (id) => {
 module.exports = {
   registerTutor,
   loginTutor,
-  getTutor,
+  getTutors,
   getTutorbyRating,
   getTutorbyName,
   getTutorbyCourse,

@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   registerTutor,
   loginTutor,
-  getTutor,
+  getTutors,
   getTutorbyName,
   getTutorbyRating,
   getTutorbyCourse,
@@ -11,7 +11,7 @@ const {
 
 router.post("/register", registerTutor);
 router.post("/login", loginTutor);
-router.get("/search", getTutor);
+router.get("/search", getTutors);
 router.get("/searchByName", getTutorbyName);
 router.get("/searchByRating", getTutorbyRating);
 router.get("/searchByCourse", getTutorbyCourse);
