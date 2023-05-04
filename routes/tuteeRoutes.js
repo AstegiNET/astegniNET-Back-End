@@ -5,7 +5,7 @@ const {
   loginTutee,
   updateTutee,
 } = require("../controllers/tuteeController");
-const { protectTutee } = require("../middleware/authMiddleware");
+const { protectTutee, protectAdmin } = require("../middleware/authMiddleware");
 
 router.post("/register", registerTutee);
 router.post("/login", loginTutee);

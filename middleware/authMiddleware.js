@@ -16,6 +16,15 @@ const protect = asyncHandler(async (req, res, next) => {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = await Tutor.findById(decoded.id).select("-password");
+
+      const tutor = await Tutor.findById(decoded.id).select("-password");
+      const admin = await Admin.findById(decoded.id).select("-password");
+      if (tutor) {
+        req.user = tutor;
+      } else if (admin) {
+        req.user = admin;
+      }
+
       next();
     } catch (error) {
       console.log(error);
@@ -40,7 +49,16 @@ const protectTutee = asyncHandler(async (req, res, next) => {
     try {
       token = req.headers.authorization.split(" ")[1];
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await Tutee.findById(decoded.id).select("-password");
+      const tutee = await Tutee.findById(decoded.id).select("-password");
+      const tutor = await Tutor.findById(decoded.id).select("-password");
+      const admin = await Admin.findById(decoded.id).select("-password");
+      if (tutee) {
+        req.user = tutee;
+      } else if (admin) {
+        req.user = admin;
+      } else if (tutor) {
+        req.user = tutor;
+      }
 
       next();
     } catch (error) {

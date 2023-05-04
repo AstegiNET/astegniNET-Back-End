@@ -24,7 +24,10 @@ const userSchema = mongoose.Schema(
       default: "tutee",
       // required: [true, "Please select a role"],
     },
-
+    verified: {
+      type: Boolean,
+      default: false,
+    },
     enrolled: [
       {
         tutor: {
