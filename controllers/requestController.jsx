@@ -1,6 +1,5 @@
 const asyncHandler = require("express-async-handler");
 const Request = require("../models/requestModel");
-const User = require("../models/tutorModel");
 
 // @desc    add course
 const sendRequest = asyncHandler(async (req, res) => {

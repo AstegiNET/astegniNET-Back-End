@@ -4,6 +4,6 @@ const { sendRequest } = require("../controllers/courseControllercopy");
 
 const { protect } = require("../middleware/authMiddleware");
 
-router.route("/addCourse").post(protect, sendRequest);
+router.route("/sendRequest").post(protect, sendRequest);
 
 module.exports = router;
