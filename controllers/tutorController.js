@@ -98,6 +98,7 @@ const getTutors = asyncHandler(async (req, res) => {
       const courseName = await Course.findOne({ _id: allTutors[i].course });
 
       new_tutors.push({
+        id: allTutors[i].id,
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,

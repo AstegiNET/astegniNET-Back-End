@@ -38,6 +38,11 @@ const userSchema = mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Course",
         },
+
+        ispaid: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     password: {
