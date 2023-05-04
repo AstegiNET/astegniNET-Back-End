@@ -127,6 +127,8 @@ const getTutorbyName = asyncHandler(async (req, res) => {
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
@@ -154,6 +156,8 @@ const getTutorbyRating = asyncHandler(async (req, res) => {
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
@@ -188,6 +192,8 @@ const getTutorbyCourse = asyncHandler(async (req, res) => {
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
