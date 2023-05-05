@@ -21,33 +21,15 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      default: "tutee",
-      // required: [true, "Please select a role"],
+      default: "admin",
     },
-    verified: {
-      type: Boolean,
-      default: false,
-    },
-    enrolled: [
-      {
-        tutor: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Tutor",
-        },
-        course: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Course",
-        },
 
-        ispaid: {
-          type: Boolean,
-          default: false,
-        },
-      },
-    ],
     password: {
       type: String,
       required: [true, "Please add a password"],
+    },
+    avatar: {
+      type: String,
     },
   },
   {
@@ -55,4 +37,4 @@ const userSchema = mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model("Tutee", userSchema);
+module.exports = mongoose.model("Admin", userSchema);

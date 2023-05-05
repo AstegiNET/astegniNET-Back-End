@@ -5,10 +5,10 @@ const {
   loginTutee,
   updateTutee,
 } = require("../controllers/tuteeController");
-const { protectTutee } = require("../middleware/authMiddleware");
+const { isTutee, protectAdmin } = require("../middleware/authMiddleware");
 
 router.post("/register", registerTutee);
 router.post("/login", loginTutee);
-router.put("/updateprofile/:id", protectTutee, updateTutee);
+router.put("/updateprofile/:id", isTutee, updateTutee);
 
 module.exports = router;

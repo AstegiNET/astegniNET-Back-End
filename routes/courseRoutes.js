@@ -7,11 +7,11 @@ const {
   deleteCourse,
 } = require("../controllers/courseController");
 
-const { protect } = require("../middleware/authMiddleware");
+const { isAdmin } = require("../middleware/authMiddleware");
 
-router.route("/addCourse").post(protect, addCourse);
+router.route("/addCourse").post(isAdmin, addCourse);
 router.route("/getCourse/:id").get(getCourse);
-router.route("deleteCourse/:id").delete(protect, deleteCourse);
-router.route("updateCourse/:id").put(protect, updateCourse);
+router.route("deleteCourse/:id").delete(isAdmin, deleteCourse);
+router.route("updateCourse/:id").put(isAdmin, updateCourse);
 
 module.exports = router;

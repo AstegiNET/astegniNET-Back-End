@@ -10,14 +10,11 @@ const Course = require("../models/courseModel");
 const registerTutor = asyncHandler(async (req, res) => {
   const { fname, lname, phone, email, salary, course, rating, password } =
     req.body;
-
   if (!fname || !lname || !phone || !email || !password || !salary) {
-    //  || !course
     res.status(400);
     throw new Error("Please add all fields");
   }
 
-  // Check if tutor exists
   const tutorExists = await Tutor.findOne({ email });
 
   if (tutorExists) {
@@ -25,11 +22,9 @@ const registerTutor = asyncHandler(async (req, res) => {
     throw new Error("Tutor already exists");
   }
 
-  // Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
 
-  // Create tutor
   const tutor = await Tutor.create({
     ...req.body,
     password: hashedPassword,
@@ -68,7 +63,7 @@ const getTutor = asyncHandler(async (req, res) => {
   const id = req.params.id;
 
   try {
-    const tutor = await Tutor.findById(id);
+    const tutor = await Tutor.findById(id).select("-password");
     res.status(200).send(tutor);
   } catch (err) {
     next(err);
@@ -98,9 +93,12 @@ const getTutors = asyncHandler(async (req, res) => {
       const courseName = await Course.findOne({ _id: allTutors[i].course });
 
       new_tutors.push({
+        id: allTutors[i].id,
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
@@ -125,9 +123,12 @@ const getTutorbyName = asyncHandler(async (req, res) => {
       const courseName = await Course.findOne({ _id: allTutors[i].course });
 
       new_tutors.push({
+        id: allTutors[i].id,
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
@@ -151,9 +152,12 @@ const getTutorbyRating = asyncHandler(async (req, res) => {
       const courseName = await Course.findOne({ _id: allTutors[i].course });
 
       new_tutors.push({
+        id: allTutors[i].id,
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
@@ -184,9 +188,12 @@ const getTutorbyCourse = asyncHandler(async (req, res) => {
       const courseName = await Course.findOne({ _id: allTutors[i].course });
 
       new_tutors.push({
+        id: allTutors[i].id,
         fname: allTutors[i].fname,
         lname: allTutors[i].lname,
         rating: allTutors[i].rating,
+        avatar: allTutors[i].avatar,
+        salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
       });
