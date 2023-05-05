@@ -2,9 +2,42 @@ const asyncHandler = require("express-async-handler");
 const Request = require("../models/requestModel");
 
 // @desc    add course
-const sendRequest = asyncHandler(async (req, res) => {
-  // const { tutor, tutee, course, description } = req.body;
+const getRequests = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    res.status(401);
+    throw new Error("please login to see your request");
+  }
 
+  if (req.user.role === "tutee") {
+    const requests = await Request.find({ tutee: req.user._id });
+    if (requests) {
+      res.status(200).json(requests);
+    } else {
+      res.status(200).json({ message: "you have no requests " });
+    }
+  }
+
+  if (req.user.role === "tutor") {
+    const requests = await Request.find({ tutor: req.user._id });
+    if (requests) {
+      res.status(200).json(requests);
+    } else {
+      res.status(200).json({ message: "you have no requests " });
+    }
+  }
+
+  if (req.user.role === "admin") {
+    const requests = await Request.find();
+    if (requests) {
+      res.status(200).json(requests);
+    } else {
+      res.status(200).json({ message: " no requests " });
+    }
+  }
+});
+
+// @desc    add course
+const sendRequest = asyncHandler(async (req, res) => {
   if (!req.user) {
     res.status(401);
     throw new Error("please login to send your request");
@@ -51,7 +84,7 @@ const updateRequest = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
+  getRequests,
   sendRequest,
-
   updateRequest,
 };

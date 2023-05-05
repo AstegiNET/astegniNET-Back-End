@@ -4,10 +4,10 @@ const {
   verify,
   success,
 } = require("../controllers/paymentController");
-const { protectTutee } = require("../middleware/authMiddleware");
+const { isTutee } = require("../middleware/authMiddleware");
 
-router.post("/pay", protectTutee, InitializePayent);
-router.get("/pay/verify/:id", protectTutee, verify);
-router.get("/pay/success", protectTutee, success);
+router.post("/pay", isTutee, InitializePayent);
+router.get("/pay/verify/:id", isTutee, verify);
+router.get("/pay/success", isTutee, success);
 
 module.exports = router;
