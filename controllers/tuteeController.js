@@ -65,38 +65,45 @@ const generateToken = (id) => {
 //@desc PUT /api/tutees/update/:id
 const updateTutee = async (req, res, next) => {
   const tutee_id = req.params.id;
-  const tutee = await Tutee.findById(req.params.id);
+  try {
+    const tutee = await Tutee.findById(req.params.id);
 
-  if (!tutee) {
-    res.status(400);
-    throw new Error("Tutee not found");
-  }
+    if (tutee) {
+      if (req.user) {
+        if (
+          req.user._id.equals(tutee._id) ||
+          req.user.role === ("admin" || "tutor")
+        ) {
+          try {
+            var hash;
+            if (req.body.password) {
+              const salt = bcrypt.genSaltSync(10);
+              hash = bcrypt.hashSync(req.body.password, salt);
+            } else {
+              hash = await Tutee.findById(req.params.id).password;
+            }
 
-  if (
-    req.user._id.equals(tutee._id) ||
-    req.user.role === ("admin" || "tutor")
-  ) {
-    try {
-      var hash;
-      if (req.body.password) {
-        const salt = bcrypt.genSaltSync(10);
-        hash = bcrypt.hashSync(req.body.password, salt);
+            const updatedTutee = await Tutee.findByIdAndUpdate(
+              tutee_id,
+              { ...req.body, password: hash },
+              { new: true }
+            );
+            res.status(200).json(updatedTutee);
+          } catch (err) {
+            next(err);
+          }
+        } else {
+          res.status(401);
+          res.send("not the right user to update");
+        }
       } else {
-        hash = await Tutee.findById(req.params.id).password;
+        res.status(401);
+        res.send("please login first");
       }
-
-      const updatedTutee = await Tutee.findByIdAndUpdate(
-        tutee_id,
-        { ...req.body, password: hash },
-        { new: true }
-      );
-      res.status(200).json(updatedTutee);
-    } catch (err) {
-      next(err);
     }
-  } else {
-    res.status(401);
-    throw new Error("please login first");
+  } catch (error) {
+    res.status(400);
+    res.send("Tutee not found");
   }
 };
 

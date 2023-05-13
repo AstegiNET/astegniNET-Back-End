@@ -22,7 +22,6 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       default: "tutee",
-      // required: [true, "Please select a role"],
     },
     verified: {
       type: Boolean,
@@ -37,6 +36,10 @@ const userSchema = mongoose.Schema(
         course: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "Course",
+        },
+        status: {
+          enum: ["pending", "accepted", "rejected"],
+          type: String,
         },
 
         ispaid: {

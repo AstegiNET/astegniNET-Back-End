@@ -2,17 +2,22 @@ const express = require("express");
 const router = express.Router();
 const {
   sendRequest,
-  updateRequest,
   getRequests,
+  acceptRequest,
+  rejectRequest,
+  deleteRequest,
 } = require("../controllers/requestController");
 
 const {
-  isAdminTutor,
+  isTutor,
   isTutee,
   isLoggedIn,
 } = require("../middleware/authMiddleware");
 
 router.route("/getRequests").get(isLoggedIn, getRequests);
 router.route("/sendRequest").post(isTutee, sendRequest);
-router.route("/updateRequest/:id").put(isAdminTutor, updateRequest);
+router.route("/acceptRequest/:id").put(isTutor, acceptRequest);
+router.route("/rejectRequest/:id").put(isTutor, rejectRequest);
+router.route("/deleteRequest/:id").delete(isTutee, deleteRequest);
+
 module.exports = router;

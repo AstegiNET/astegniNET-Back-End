@@ -115,6 +115,38 @@ const isAdminTutor = asyncHandler(async (req, res, next) => {
   }
 });
 
+//tutor or admin middleware
+const isAdminTutee = asyncHandler(async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    try {
+      token = req.headers.authorization.split(" ")[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const tutee = await Tutee.findById(decoded.id).select("-password");
+      const admin = await Admin.findById(decoded.id).select("-password");
+      if (tutee) {
+        req.user = tutee;
+      } else if (admin) {
+        req.user = admin;
+      }
+
+      next();
+    } catch (error) {
+      console.log(error);
+      res.status(401);
+      throw new Error("Not authorized");
+    }
+  }
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized, no token");
+  }
+});
+
 //tutee or admin or tutor middleware
 const isLoggedIn = asyncHandler(async (req, res, next) => {
   let token;
@@ -156,5 +188,6 @@ module.exports = {
   isTutor,
   isAdmin,
   isAdminTutor,
+  isAdminTutee,
   isLoggedIn,
 };
