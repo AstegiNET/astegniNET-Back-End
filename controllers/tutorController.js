@@ -78,15 +78,25 @@ const getTutors = asyncHandler(async (req, res) => {
   if (rating) query.rating = rating;
 
   try {
-    const regex = new RegExp(course, "i");
-    const courses = await Course.find({ name: { $regex: regex } });
+    const regex_course = new RegExp(course, "i");
+    const courses = await Course.find({ name: { $regex: regex_course } });
     const tutors = await Promise.all(
       courses.map((course) => {
         if (course) query.course = course._id;
         return Tutor.find(query);
       })
     );
+
     let allTutors = tutors.filter((tutor) => tutor.length !== 0).flat();
+
+    // const regex_name = new RegExp(fname, "i");
+    // const my_tutor = await Tutor.find({ fname: { $regex: regex_name } });
+    // const my_tutors = await Promise.all(
+    //   my_tutor.map((tutor) => {
+    //     if (tutor) query.tutor = tutor._id;
+    //     return Tutor.find(query);
+    //   })
+    // );
 
     let new_tutors = [];
     for (let i = 0; i < allTutors.length; i++) {

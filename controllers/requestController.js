@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Request = require("../models/requestModel");
 const Tutee = require("../models/tuteeModel");
+const Enrollment = require("../models/enrollmentModel");
 
 // @desc    add course
 const getRequests = asyncHandler(async (req, res) => {
@@ -52,7 +53,7 @@ const sendRequest = asyncHandler(async (req, res) => {
     tutee: tutee,
   });
 
-  if (!oldRequest) {
+  if (!oldRequest.length) {
     const request = await Request.create({
       tutee: req.user._id,
       ...req.body,
@@ -96,20 +97,27 @@ const acceptRequest = asyncHandler(async (req, res) => {
 
     if (updatedRequest) {
       const tuteeId = updatedRequest.tutee;
-      const updatedTutee = await Tutee.findByIdAndUpdate(
-        tuteeId,
-        {
-          $push: {
-            enrolled: {
-              tutor: updatedRequest.tutor,
-              course: updatedRequest.course,
-              status: updatedRequest.status,
-              startDate: new Date(),
-            },
+      const oldEnrollement = await Enrollment.find({
+        tutee: updatedRequest.tutee,
+        tutor: updatedRequest.tutor,
+        course: updatedRequest.course,
+      });
+
+      if (!oldEnrollement.lenth) {
+        const createEnrollment = await Enrollment.create({
+          tutee: updatedRequest.tutee,
+          tutor: updatedRequest.tutor,
+          course: updatedRequest.course,
+          status: updatedRequest.status,
+        });
+        const updatedTutee = await Tutee.findByIdAndUpdate(
+          tuteeId,
+          {
+            enrollement: createEnrollment._id,
           },
-        },
-        { new: true }
-      );
+          { new: true }
+        );
+      }
     }
     res.status(200).json(updatedRequest);
   } else {
@@ -138,7 +146,6 @@ const rejectRequest = asyncHandler(async (req, res) => {
   }
 
   const oldRequest = await Request.findById(request_id);
-
   if (oldRequest.status === "pending") {
     const updatedRequest = await Request.findByIdAndUpdate(
       request_id,
@@ -149,23 +156,8 @@ const rejectRequest = asyncHandler(async (req, res) => {
     );
 
     if (updatedRequest) {
-      const tuteeId = updatedRequest.tutee;
-      const updatedTutee = await Tutee.findByIdAndUpdate(
-        tuteeId,
-        {
-          $push: {
-            enrolled: {
-              tutor: updatedRequest.tutor,
-              course: updatedRequest.course,
-              status: updatedRequest.status,
-              startDate: new Date(),
-            },
-          },
-        },
-        { new: true }
-      );
+      res.status(200).json(updatedRequest);
     }
-    res.status(200).json(updatedRequest);
   } else {
     res.status(200).json(`you have ${oldRequest.status} it before`);
   }

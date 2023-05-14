@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Enrollment = require("../models/enrollmentModel");
 
 const userSchema = mongoose.Schema(
   {
@@ -27,6 +28,10 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    enrollement: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Enrollment",
+    },
     enrolled: [
       {
         tutor: {
@@ -45,6 +50,10 @@ const userSchema = mongoose.Schema(
         ispaid: {
           type: Boolean,
           default: false,
+        },
+        pay_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Payment",
         },
       },
     ],
