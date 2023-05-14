@@ -103,7 +103,7 @@ const acceptRequest = asyncHandler(async (req, res) => {
         course: updatedRequest.course,
       });
 
-      if (!oldEnrollement.lenth) {
+      if (!oldEnrollement.length) {
         const createEnrollment = await Enrollment.create({
           tutee: updatedRequest.tutee,
           tutor: updatedRequest.tutor,
