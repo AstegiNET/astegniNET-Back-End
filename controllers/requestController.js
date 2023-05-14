@@ -31,6 +31,7 @@ const getRequests = asyncHandler(async (req, res) => {
   if (req.user.role === "admin") {
     const requests = await Request.find();
     if (requests) {
+      console.log(requests);
       res.status(200).json(requests);
     } else {
       res.status(200).json({ message: " no requests " });
@@ -95,30 +96,6 @@ const acceptRequest = asyncHandler(async (req, res) => {
       { new: true }
     );
 
-    if (updatedRequest) {
-      const tuteeId = updatedRequest.tutee;
-      const oldEnrollement = await Enrollment.find({
-        tutee: updatedRequest.tutee,
-        tutor: updatedRequest.tutor,
-        course: updatedRequest.course,
-      });
-
-      if (!oldEnrollement.length) {
-        const createEnrollment = await Enrollment.create({
-          tutee: updatedRequest.tutee,
-          tutor: updatedRequest.tutor,
-          course: updatedRequest.course,
-          status: updatedRequest.status,
-        });
-        const updatedTutee = await Tutee.findByIdAndUpdate(
-          tuteeId,
-          {
-            enrollement: createEnrollment._id,
-          },
-          { new: true }
-        );
-      }
-    }
     res.status(200).json(updatedRequest);
   } else {
     res.status(200).json(`you have ${oldRequest.status} it before`);

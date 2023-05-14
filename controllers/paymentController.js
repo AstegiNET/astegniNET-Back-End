@@ -1,6 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const Payment = require("../models/paymentModel");
 const Tutee = require("../models/tuteeModel");
+const Enrollment = require("../models/enrollmentModel");
+const Tutor = require("../models/tutorModel");
 
 const axios = require("axios");
 const Chapa = require("chapa");
@@ -31,7 +33,6 @@ const InitializePayment = async (req, res) => {
     .post(base_url, inputData, config)
     .then((response) => {
       console.log(response.data.data);
-      // res.send(JSON.stringify({ ...response.data.data, ...inputData }));
       res.status(201).json({ ...response.data.data, ...inputData });
     })
     .catch((err) => {
@@ -68,14 +69,42 @@ const addPayment = asyncHandler(async (req, res) => {
     tex_ref: tex_ref,
     status: "payed",
   });
-  console.log(oldPayment);
+
   if (!oldPayment.length) {
     const payment = await Payment.create({
       tutee: req.user._id,
       ...req.body,
     });
+
     if (payment) {
+      const enrollment = await Enrollment.create({
+        tutee: payment.tutee,
+        tutor: payment.tutor,
+        course: payment.course,
+        status: "accepted",
+        ispaid: true,
+        pay_id: payment._id,
+      });
+      if (enrollment) {
+        const updatedTutee = await Tutee.findByIdAndUpdate(
+          enrollment.tutee,
+          {
+            enrollement: enrollment._id,
+          },
+          { new: true }
+        );
+
+        const updateTutor = Tutor.findByIdAndUpdate(
+          enrollment.tutor,
+          {
+            $push: { tutee: enrollment.tutee },
+            isQualified: true,
+          },
+          { new: true }
+        );
+      }
     }
+
     res.status(200).json(payment);
   } else {
     res.status(200).json("you have already payed");
