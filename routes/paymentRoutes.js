@@ -1,13 +1,14 @@
 const router = require("express").Router();
 const {
-  InitializePayent,
+  InitializePayment,
   verify,
   success,
+  addPayment,
 } = require("../controllers/paymentController");
 const { isTutee } = require("../middleware/authMiddleware");
 
-router.post("/pay", isTutee, InitializePayent);
+router.post("/pay", isTutee, InitializePayment);
 router.get("/pay/verify/:id", isTutee, verify);
 router.get("/pay/success", isTutee, success);
-
+router.route("/addPay").post(isTutee, addPayment);
 module.exports = router;

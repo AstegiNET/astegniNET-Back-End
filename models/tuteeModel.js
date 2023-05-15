@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Enrollment = require("../models/enrollmentModel");
 
 const userSchema = mongoose.Schema(
   {
@@ -22,11 +23,14 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       default: "tutee",
-      // required: [true, "Please select a role"],
     },
     verified: {
       type: Boolean,
       default: false,
+    },
+    enrollement: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Enrollment",
     },
     enrolled: [
       {
@@ -38,10 +42,18 @@ const userSchema = mongoose.Schema(
           type: mongoose.Schema.Types.ObjectId,
           ref: "Course",
         },
+        status: {
+          enum: ["pending", "accepted", "rejected"],
+          type: String,
+        },
 
         ispaid: {
           type: Boolean,
           default: false,
+        },
+        pay_id: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Payment",
         },
       },
     ],
