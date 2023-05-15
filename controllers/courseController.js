@@ -13,6 +13,16 @@ const getCourse = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get course
+const getCourses = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  try {
+    const courses = await Course.find();
+    res.status(200).json(courses);
+  } catch (Error) {
+    res.send(Error);
+  }
+});
 // @desc    add course
 const addCourse = asyncHandler(async (req, res) => {
   const { name, level } = req.body;
@@ -69,6 +79,7 @@ const deleteCourse = asyncHandler(async (req, res) => {
 
 module.exports = {
   getCourse,
+  getCourses,
   addCourse,
   updateCourse,
   deleteCourse,

@@ -77,31 +77,37 @@ const addPayment = asyncHandler(async (req, res) => {
     });
 
     if (payment) {
-      const enrollment = await Enrollment.create({
-        tutee: payment.tutee,
-        tutor: payment.tutor,
-        course: payment.course,
-        status: "accepted",
+      const oldEnrollment = await Enrollment.find({
+        tutor: tutor,
+        course: course,
+        tutee: tutee,
         ispaid: true,
-        pay_id: payment._id,
       });
-      if (enrollment) {
-        const updatedTutee = await Tutee.findByIdAndUpdate(
-          enrollment.tutee,
-          {
-            enrollement: enrollment._id,
-          },
-          { new: true }
-        );
 
-        const updateTutor = Tutor.findByIdAndUpdate(
-          enrollment.tutor,
-          {
-            $push: { tutee: enrollment.tutee },
-            isQualified: true,
-          },
-          { new: true }
-        );
+      if (!oldEnrollment.length) {
+        const enrollment = await Enrollment.create({
+          tutee: payment.tutee,
+          tutor: payment.tutor,
+          course: payment.course,
+          status: "accepted",
+          ispaid: true,
+          pay_id: payment._id,
+        });
+        if (enrollment) {
+          const updatedTutee = await Tutee.findByIdAndUpdate(
+            enrollment.tutee,
+            {
+              $push: { enrollement: enrollment._id },
+            },
+            { new: true }
+          );
+
+          await Tutor.findByIdAndUpdate(
+            enrollment.tutor,
+            { $push: { tutee: enrollment._id } },
+            { new: true }
+          );
+        }
       }
     }
 
