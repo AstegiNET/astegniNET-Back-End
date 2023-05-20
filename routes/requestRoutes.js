@@ -6,6 +6,7 @@ const {
   acceptRequest,
   rejectRequest,
   deleteRequest,
+  fetchRequests,
 } = require("../controllers/requestController");
 
 const {
@@ -15,6 +16,8 @@ const {
 } = require("../middleware/authMiddleware");
 
 router.route("/getRequests").get(isLoggedIn, getRequests);
+router.route("/fetchRequests").get(isLoggedIn, fetchRequests);
+
 router.route("/sendRequest").post(isTutee, sendRequest);
 router.route("/acceptRequest/:id").put(isTutor, acceptRequest);
 router.route("/rejectRequest/:id").put(isTutor, rejectRequest);

@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add a first name"],
     },
+
     lname: {
       type: String,
       required: [true, "Please add a last name"],
@@ -23,6 +24,9 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       default: "tutee",
+    },
+    level: {
+      type: String,
     },
     verified: {
       type: Boolean,
@@ -60,6 +64,9 @@ const userSchema = mongoose.Schema(
     password: {
       type: String,
       required: [true, "Please add a password"],
+    },
+    avatar: {
+      type: String,
     },
   },
   {

@@ -32,7 +32,7 @@ const InitializePayment = async (req, res) => {
   await axios
     .post(base_url, inputData, config)
     .then((response) => {
-      console.log(response.data.data);
+      console.log("response.data.data");
       res.status(201).json({ ...response.data.data, ...inputData });
     })
     .catch((err) => {
