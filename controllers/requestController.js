@@ -169,22 +169,22 @@ const sendRequest = asyncHandler(async (req, res) => {
 //accept request
 const acceptRequest = asyncHandler(async (req, res) => {
   const request_id = req.params.id;
-  const request = await Request.findById(req.params.id);
+  const request = await Request.findById(request_id);
 
   if (!request) {
     res.status(400);
     throw new Error("Request not found");
   }
 
-  if (!req.user) {
-    res.status(401);
-    throw new Error("please login first");
-  }
+  // if (!req.user) {
+  //   res.status(401);
+  //   throw new Error("please login first");
+  // }
 
-  if (!req.user._id.equals(request.tutor)) {
-    res.status(401);
-    throw new Error("you can't update this request");
-  }
+  // if (!req.user._id.equals(request.tutor)) {
+  //   res.status(401);
+  //   throw new Error("you can't update this request");
+  // }
 
   const oldRequest = await Request.findById(request_id);
 
@@ -206,22 +206,22 @@ const acceptRequest = asyncHandler(async (req, res) => {
 //reject request
 const rejectRequest = asyncHandler(async (req, res) => {
   const request_id = req.params.id;
-  const request = await Request.findById(req.params.id);
+  const request = await Request.findById(request_id);
 
   if (!request) {
     res.status(400);
     throw new Error("Request not found");
   }
 
-  if (!req.user) {
-    res.status(401);
-    throw new Error("please login first");
-  }
+  // if (!req.user) {
+  //   res.status(401);
+  //   throw new Error("please login first");
+  // }
 
-  if (!req.user._id.equals(request.tutor)) {
-    res.status(401);
-    throw new Error("you can't update this request");
-  }
+  // if (!req.user._id.equals(request.tutor)) {
+  //   res.status(401);
+  //   throw new Error("you can't update this request");
+  // }
 
   const oldRequest = await Request.findById(request_id);
   if (oldRequest.status === "pending") {
@@ -256,7 +256,7 @@ const deleteRequest = asyncHandler(async (req, res) => {
     throw new Error("please login first");
   }
 
-  if (request.status === "pending" && request.tutee === req.user._id) {
+  if (request.status === "pending") {
     await Request.findByIdAndDelete(request_id);
     res.status(200).json("succesfully deleted request");
   } else {
