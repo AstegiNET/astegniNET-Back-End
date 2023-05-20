@@ -9,7 +9,6 @@ const {
 const { isTutee, isAdmin } = require("../middleware/authMiddleware");
 
 router.post("/register", registerTutee);
-
 router.post("/login", loginTutee);
 router.put("/updateprofile/:id", isTutee, updateTutee);
 router.get("/getTutees", isAdmin, getTutees);
