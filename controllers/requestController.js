@@ -49,26 +49,6 @@ const fetchRequests = asyncHandler(async (req, res) => {
     throw new Error("please login to see your request");
   }
 
-  // const fetchRequests = async (requests) => {
-  //   const myArray = await Promise.all(
-  //     requests.map(async (obj) => {
-  //       const tutor = await Tutor.findById(obj.tutor);
-  //       const tutee = await Tutee.findById(obj.tutee);
-  //       const course = await Course.findById(obj.course);
-
-  //       return {
-  //         tutor: tutor.fname,
-  //         tutee: tutee.fname,
-  //         course: course.name,
-  //         status: obj.status,
-  //         description: obj.description,
-  //       };
-  //     })
-  //   );
-
-  //   return myArray;
-  // };
-
   if (req.user.role === "tutee") {
     const requests = await Request.find({ tutee: req.user._id });
     if (requests) {
@@ -79,8 +59,10 @@ const fetchRequests = asyncHandler(async (req, res) => {
           const course = await Course.findById(obj.course);
 
           return {
+            _id: obj._id,
             tutor: `${tutor.fname} ${tutor.lname}`,
             tutor_avatar: tutor.avatar,
+
             tutee: `${tutee.fname} ${tutee.lname}`,
             tutee_avatar: tutee.avatar,
             tutee_level: tutee.level,
@@ -107,6 +89,7 @@ const fetchRequests = asyncHandler(async (req, res) => {
           const course = await Course.findById(obj.course);
 
           return {
+            _id: obj._id,
             tutor: tutor.fname,
             tutee: tutee.fname,
             course: course.name,
@@ -132,6 +115,7 @@ const fetchRequests = asyncHandler(async (req, res) => {
           const course = await Course.findById(obj.course);
 
           return {
+            _id: obj._id,
             tutor: tutor.fname,
             tutee: tutee.fname,
             course: course.name,
