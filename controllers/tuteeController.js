@@ -55,6 +55,15 @@ const loginTutee = asyncHandler(async (req, res) => {
   }
 });
 
+const getTutees = asyncHandler(async (req, res) => {
+  const tutees = await Tutee.find();
+  if (tutees) {
+    res.status(200).json(tutees);
+  } else {
+    res.status(200).json("no tutees found");
+  }
+});
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
@@ -111,4 +120,5 @@ module.exports = {
   registerTutee,
   updateTutee,
   loginTutee,
+  getTutees,
 };
