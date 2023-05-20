@@ -79,8 +79,11 @@ const fetchRequests = asyncHandler(async (req, res) => {
           const course = await Course.findById(obj.course);
 
           return {
-            tutor: tutor.fname,
-            tutee: tutee.fname,
+            tutor: `${tutor.fname} ${tutor.lname}`,
+            tutor_avatar: tutor.avatar,
+            tutee: `${tutee.fname} ${tutee.lname}`,
+            tutee_avatar: tutee.avatar,
+            tutee_level: tutee.level,
             course: course.name,
             status: obj.status,
             description: obj.description,
