@@ -90,8 +90,12 @@ const fetchRequests = asyncHandler(async (req, res) => {
 
           return {
             _id: obj._id,
-            tutor: tutor.fname,
-            tutee: tutee.fname,
+            tutor: `${tutor.fname} ${tutor.lname}`,
+            tutor_avatar: tutor.avatar,
+
+            tutee: `${tutee.fname} ${tutee.lname}`,
+            tutee_avatar: tutee.avatar,
+            tutee_level: tutee.level,
             course: course.name,
             status: obj.status,
             description: obj.description,
@@ -116,8 +120,12 @@ const fetchRequests = asyncHandler(async (req, res) => {
 
           return {
             _id: obj._id,
-            tutor: tutor.fname,
-            tutee: tutee.fname,
+            tutor: `${tutor.fname} ${tutor.lname}`,
+            tutor_avatar: tutor.avatar,
+
+            tutee: `${tutee.fname} ${tutee.lname}`,
+            tutee_avatar: tutee.avatar,
+            tutee_level: tutee.level,
             course: course.name,
             status: obj.status,
             description: obj.description,
