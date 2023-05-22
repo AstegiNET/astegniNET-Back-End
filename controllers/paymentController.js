@@ -3,6 +3,7 @@ const Payment = require("../models/paymentModel");
 const Tutee = require("../models/tuteeModel");
 const Enrollment = require("../models/enrollmentModel");
 const Tutor = require("../models/tutorModel");
+const Request = require("../models/requestModel");
 
 const axios = require("axios");
 const Chapa = require("chapa");
@@ -32,7 +33,7 @@ const InitializePayment = async (req, res) => {
   await axios
     .post(base_url, inputData, config)
     .then((response) => {
-      console.log("response.data.data");
+      console.log({ ...response.data.data, ...inputData });
       res.status(201).json({ ...response.data.data, ...inputData });
     })
     .catch((err) => {
@@ -56,64 +57,55 @@ const verify = async (req, res) => {
 // @desc    add course
 const addPayment = asyncHandler(async (req, res) => {
   const { course, tutor, tex_ref } = req.body;
+  const tutee = req.user;
+  const request_id = req.params.id;
 
   if (!req.user) {
     res.status(401);
     throw new Error("please login to pay your payment");
   }
-  const tutee = req.user;
-  const oldPayment = await Payment.find({
-    tutor: tutor,
-    course: course,
-    tutee: tutee,
-    tex_ref: tex_ref,
-    status: "payed",
-  });
 
-  if (!oldPayment.length) {
+  const request = Request.findById(request_id);
+
+  if (request && request.paymentStatus != "payed") {
     const payment = await Payment.create({
       tutee: req.user._id,
       ...req.body,
     });
-
     if (payment) {
-      const oldEnrollment = await Enrollment.find({
-        tutor: tutor,
-        course: course,
-        tutee: tutee,
+      const enrollment = await Enrollment.create({
+        request: request_id,
+        tutee: payment.tutee,
+        tutor: payment.tutor,
+        course: payment.course,
+        status: "accepted",
         ispaid: true,
+        pay_id: payment._id,
       });
 
-      if (!oldEnrollment.length) {
-        const enrollment = await Enrollment.create({
-          tutee: payment.tutee,
-          tutor: payment.tutor,
-          course: payment.course,
-          status: "accepted",
-          ispaid: true,
-          pay_id: payment._id,
-        });
-        if (enrollment) {
-          const updatedTutee = await Tutee.findByIdAndUpdate(
-            enrollment.tutee,
-            {
-              $push: { enrollement: enrollment._id },
-            },
-            { new: true }
-          );
+      if (enrollment) {
+        await Tutee.findByIdAndUpdate(
+          enrollment.tutee,
+          {
+            $push: { enrollement: enrollment._id },
+          },
+          { new: true }
+        );
 
-          await Tutor.findByIdAndUpdate(
-            enrollment.tutor,
-            { $push: { tutee: enrollment._id } },
-            { new: true }
-          );
-        }
+        await Tutor.findByIdAndUpdate(
+          enrollment.tutor,
+          { $push: { tutee: enrollment._id } },
+          { new: true }
+        );
+        await Request.findByIdAndUpdate(
+          request_id,
+          { paymentStatus: "payed" },
+          { new: true }
+        );
       }
     }
 
     res.status(200).json(payment);
-  } else {
-    res.status(200).json("you have already payed");
   }
 });
 

@@ -53,22 +53,31 @@ const fetchRequests = asyncHandler(async (req, res) => {
     const requests = await Request.find({ tutee: req.user._id });
     if (requests) {
       const updatedArray = await Promise.all(
-        requests.map(async (obj) => {
-          const tutor = await Tutor.findById(obj.tutor);
-          const tutee = await Tutee.findById(obj.tutee);
-          const course = await Course.findById(obj.course);
+        requests.map(async (request) => {
+          const tutor = await Tutor.findById(request.tutor);
+          const tutee = await Tutee.findById(request.tutee);
+          const course = await Course.findById(request.course);
 
           return {
-            _id: obj._id,
-            tutor: `${tutor.fname} ${tutor.lname}`,
+            _id: request._id,
+            tutor_name: `${tutor.fname} ${tutor.lname}`,
             tutor_avatar: tutor.avatar,
+            tutor_id: tutor._id,
+            tutor_salary: tutor.salary,
 
-            tutee: `${tutee.fname} ${tutee.lname}`,
+            tutee_name: `${tutee.fname} ${tutee.lname}`,
             tutee_avatar: tutee.avatar,
             tutee_level: tutee.level,
+            tutee_id: tutee._id,
+            tutee_email: tutee.email,
+            tutee_phone: tutee.phone,
+
             course: course.name,
-            status: obj.status,
-            description: obj.description,
+            course_id: course._id,
+
+            status: request.status,
+            paymentStatus: request.paymentStatus,
+            description: request.description,
           };
         })
       );
@@ -83,22 +92,31 @@ const fetchRequests = asyncHandler(async (req, res) => {
     const requests = await Request.find({ tutor: req.user._id });
     if (requests) {
       const updatedArray = await Promise.all(
-        requests.map(async (obj) => {
-          const tutor = await Tutor.findById(obj.tutor);
-          const tutee = await Tutee.findById(obj.tutee);
-          const course = await Course.findById(obj.course);
+        requests.map(async (request) => {
+          const tutor = await Tutor.findById(request.tutor);
+          const tutee = await Tutee.findById(request.tutee);
+          const course = await Course.findById(request.course);
 
           return {
-            _id: obj._id,
-            tutor: `${tutor.fname} ${tutor.lname}`,
+            _id: request._id,
+            tutor_name: `${tutor.fname} ${tutor.lname}`,
             tutor_avatar: tutor.avatar,
+            tutor_id: tutor._id,
+            tutor_salary: tutor.salary,
 
-            tutee: `${tutee.fname} ${tutee.lname}`,
+            tutee_name: `${tutee.fname} ${tutee.lname}`,
             tutee_avatar: tutee.avatar,
             tutee_level: tutee.level,
+            tutee_id: tutee._id,
+            tutee_email: tutee.email,
+            tutee_phone: tutee.phone,
+
             course: course.name,
-            status: obj.status,
-            description: obj.description,
+            course_id: course._id,
+
+            status: request.status,
+            paymentStatus: request.paymentStatus,
+            description: request.description,
           };
         })
       );
@@ -113,22 +131,31 @@ const fetchRequests = asyncHandler(async (req, res) => {
     const requests = await Request.find();
     if (requests) {
       const updatedArray = await Promise.all(
-        requests.map(async (obj) => {
-          const tutor = await Tutor.findById(obj.tutor);
-          const tutee = await Tutee.findById(obj.tutee);
-          const course = await Course.findById(obj.course);
+        requests.map(async (request) => {
+          const tutor = await Tutor.findById(request.tutor);
+          const tutee = await Tutee.findById(request.tutee);
+          const course = await Course.findById(request.course);
 
           return {
-            _id: obj._id,
-            tutor: `${tutor.fname} ${tutor.lname}`,
+            _id: request._id,
+            tutor_name: `${tutor.fname} ${tutor.lname}`,
             tutor_avatar: tutor.avatar,
+            tutor_id: tutor._id,
+            tutor_salary: tutor.salary,
 
-            tutee: `${tutee.fname} ${tutee.lname}`,
+            tutee_name: `${tutee.fname} ${tutee.lname}`,
             tutee_avatar: tutee.avatar,
             tutee_level: tutee.level,
+            tutee_id: tutee._id,
+            tutee_email: tutee.email,
+            tutee_phone: tutee.phone,
+
             course: course.name,
-            status: obj.status,
-            description: obj.description,
+            course_id: course._id,
+
+            status: request.status,
+            paymentStatus: request.paymentStatus,
+            description: request.description,
           };
         })
       );
@@ -175,16 +202,6 @@ const acceptRequest = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Request not found");
   }
-
-  // if (!req.user) {
-  //   res.status(401);
-  //   throw new Error("please login first");
-  // }
-
-  // if (!req.user._id.equals(request.tutor)) {
-  //   res.status(401);
-  //   throw new Error("you can't update this request");
-  // }
 
   const oldRequest = await Request.findById(request_id);
 
