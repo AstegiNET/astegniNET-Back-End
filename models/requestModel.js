@@ -23,6 +23,11 @@ const requestSchema = mongoose.Schema(
       enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
+    paymentStatus: {
+      type: String,
+      enum: ["payed", "pending"],
+      default: "pending",
+    },
     description: {
       type: String,
       default: "I want to enroll your course .",
