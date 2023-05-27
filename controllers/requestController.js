@@ -78,6 +78,7 @@ const fetchRequests = asyncHandler(async (req, res) => {
             status: request.status,
             paymentStatus: request.paymentStatus,
             description: request.description,
+            updatedAt: request.updatedAt,
           };
         })
       );
@@ -117,6 +118,7 @@ const fetchRequests = asyncHandler(async (req, res) => {
             status: request.status,
             paymentStatus: request.paymentStatus,
             description: request.description,
+            updatedAt: request.updatedAt,
           };
         })
       );
@@ -156,6 +158,7 @@ const fetchRequests = asyncHandler(async (req, res) => {
             status: request.status,
             paymentStatus: request.paymentStatus,
             description: request.description,
+            updatedAt: request.updatedAt,
           };
         })
       );
@@ -338,6 +341,9 @@ const fetchEnrollments = asyncHandler(async (req, res) => {
 
             ispaid: request.ispaid,
             pay_id: request.pay_id,
+            updatedAt: request.updatedAt,
+
+            // ...request._doc,
           };
         })
       );
@@ -376,6 +382,9 @@ const fetchEnrollments = asyncHandler(async (req, res) => {
 
             ispaid: request.ispaid,
             pay_id: request.pay_id,
+            updatedAt: request.updatedAt,
+
+            // ...request._doc,
           };
         })
       );
@@ -414,6 +423,9 @@ const fetchEnrollments = asyncHandler(async (req, res) => {
 
             ispaid: request.ispaid,
             pay_id: request.pay_id,
+            updatedAt: request.updatedAt,
+
+            // ...request._doc,
           };
         })
       );

@@ -102,6 +102,7 @@ const getTutors = asyncHandler(async (req, res) => {
         salary: allTutors[i].salary,
         courseName: courseName.name,
         courseLevel: courseName.level,
+        ...allTutors[i]._doc,
       });
     }
 
