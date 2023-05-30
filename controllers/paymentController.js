@@ -109,9 +109,26 @@ const addPayment = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    add course
+const getPayment = asyncHandler(async (req, res) => {
+  const tex_ref_id = req.params.id;
+  if (!req.user) {
+    res.status(401);
+    throw new Error("please login to pay your payment");
+  }
+
+  const paymentInfo = await Payment.findOne({ tex_ref: tex_ref_id });
+  console.log(paymentInfo);
+  if (paymentInfo) {
+    res.status(200).json(paymentInfo);
+  } else {
+    res.status(200).json(`no payment by tex_ref=${tex_ref_id}`);
+  }
+});
+
 // success callback
 const success = async (req, res) => {
   res.render("success");
 };
 
-module.exports = { InitializePayment, verify, success, addPayment };
+module.exports = { InitializePayment, verify, success, addPayment, getPayment };

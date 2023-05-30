@@ -19,6 +19,8 @@ app.use("/api/tutors", require("./routes/tutorRoutes"));
 app.use("/api/admins", require("./routes/adminRoutes"));
 app.use("/api/courses", require("./routes/courseRoutes"));
 app.use("/api/request", require("./routes/requestRoutes"));
+
+// app.use("/api/enrollments", require("./routes/enrollmentRoutes"));
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/videocall", require("./routes/videoRoute"));
 
