@@ -185,6 +185,7 @@ const isLoggedIn = asyncHandler(async (req, res, next) => {
   }
 });
 
+//exporting all
 module.exports = {
   isTutee,
   isTutor,
