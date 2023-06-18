@@ -14,6 +14,10 @@ app.use(cors());
 
 const port = process.env.PORT || 5000;
 
+app.get("/", (req, res) => {
+  res.send("astegninet is loading...");
+});
+
 app.use("/api/tutees", require("./routes/tuteeRoutes"));
 app.use("/api/tutors", require("./routes/tutorRoutes"));
 app.use("/api/admins", require("./routes/adminRoutes"));
