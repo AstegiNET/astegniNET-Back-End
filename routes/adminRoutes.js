@@ -9,6 +9,8 @@ const { isAdmin } = require("../middleware/authMiddleware");
 
 router.post("/register", registerAdmin);
 router.post("/login", loginAdmin);
-router.route("/verifyUser/:id").put(isAdmin, verifyUser);
+
+// router.route("/verifyUser/:id").put(isAdmin, verifyUser);
+router.route("/verifyUser/:id").put(verifyUser);
 
 module.exports = router;
