@@ -61,10 +61,10 @@ const loginAdmin = asyncHandler(async (req, res) => {
 //verify user
 const verifyUser = asyncHandler(async (req, res) => {
   const userId = req.params.id;
-  if (!req.user) {
-    res.status(400);
-    throw new Error("please login as admin first");
-  }
+  // if (!req.user) {
+  //   res.status(400);
+  //   throw new Error("please login as admin first");
+  // }
 
   const tutor = await Tutor.findOne({ _id: userId });
   const tutee = await Tutee.findOne({ _id: userId });
