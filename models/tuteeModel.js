@@ -36,6 +36,12 @@ const userSchema = mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Enrollment",
     },
+
+    enrolledTutor: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Tutor",
+    },
+
     enrolled: [
       {
         tutor: {

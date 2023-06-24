@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, "Please add a last name"],
     },
+    sex: { type: String },
     phone: {
       type: String,
       required: [true, "Please add a phone number"],
@@ -32,6 +33,7 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
     course: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "Please select a course"],
@@ -39,13 +41,18 @@ const userSchema = mongoose.Schema(
     },
     tutee: {
       type: [mongoose.Schema.Types.ObjectId],
-      ref: "Tutee",
+      ref: "Enrollment",
     },
+    enrolledTutee: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutee" },
+    about: { type: String },
+    education: { type: String },
+    schedule: {
+      type: [String],
+    },
+
     rating: {
-      type: Number,
-      default: 1,
-      min: 1,
-      max: 10,
+      type: [Number],
+      default: [1],
     },
 
     password: {

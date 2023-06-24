@@ -2,9 +2,9 @@ const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
 const cors = require("cors");
-
 const { errorHandler } = require("./middleware/errorMiddleware");
 const connectDB = require("./config/db");
+const createSocketServer = require("./messageServer");
 connectDB();
 
 const app = express();
@@ -33,4 +33,5 @@ app.use(errorHandler);
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port: ${process.env.PORT}`);
+  createSocketServer();
 });

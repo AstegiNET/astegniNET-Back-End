@@ -5,6 +5,18 @@ const User = require("../models/tutorModel");
 // @desc    Get message
 const getMessages = asyncHandler(async (req, res) => {
   try {
+    const messages = await Message.find({ message_id: req.params.id });
+    if (messages) {
+    }
+    res.status(200).json(messages);
+  } catch (Error) {
+    res.send(Error);
+  }
+});
+
+// @desc    Get message
+const getAllMessages = asyncHandler(async (req, res) => {
+  try {
     const messages = await Message.find();
     if (messages) {
     }
@@ -27,6 +39,7 @@ const sendMessage = asyncHandler(async (req, res) => {
   }
 
   const message = await Message.create({
+    message_id: `${req.user.id}${reciever}`,
     sender: req.user.id,
     reciever: reciever,
     body: body,
@@ -56,4 +69,5 @@ module.exports = {
   getMessages,
   sendMessage,
   deleteMessage,
+  getAllMessages,
 };
