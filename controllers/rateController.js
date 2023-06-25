@@ -50,9 +50,6 @@ const rateTutor = asyncHandler(async (req, res) => {
 
 // @desc    Get message
 const getAllRates = asyncHandler(async (req, res) => {
-  if (!req.user) {
-    res.status(401).json({ message: "please  login as tutor" });
-  }
   try {
     const rates = await Rating.find({ tutor: req.params.id });
     if (rates) {
