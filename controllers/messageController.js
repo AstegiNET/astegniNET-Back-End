@@ -31,7 +31,8 @@ const getMessages = asyncHandler(async (req, res) => {
 
           return {
             ...message._doc,
-
+            tutor_avatar: tutor.avatar,
+            tutee_avatar: tutee.avatar,
             tutor_name: `${tutor.fname} ${tutor.lname}`,
             tutee_name: `${tutee.fname} ${tutee.lname}`,
           };
