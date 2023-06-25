@@ -25,18 +25,16 @@ const getMessages = asyncHandler(async (req, res) => {
         messages.map(async (message) => {
           var receiver;
           var sender;
-          if (message.message_id.slice(0, 24) === message.sender) {
-            sender = await Tutor.findById(message.sender);
-            receiver = await Tutee.findById(message.receiver);
+          console.log(message.message_id.slice(0, 24));
+          console.log(message.sender);
+
+          if (message.message_id.slice(0, 24) === message.sender.toString()) {
+            sender = await Tutor.findById(message.sender.toString());
+            receiver = await Tutee.findById(message.receiver.toString());
           } else {
-            sender = await Tutee.findById(message.sender);
-            receiver = await Tutor.findById(message.receiver);
+            sender = await Tutee.findById(message.sender.toString());
+            receiver = await Tutor.findById(message.receiver.toString());
           }
-          const tutorId = message.message_id.slice(0, 24);
-          const tuteeId = message.message_id.slice(24, 48);
-          const tutor = await Tutor.findById(tutorId);
-          const tutee = await Tutee.findById(tuteeId);
-          console.log(sender);
 
           return {
             ...message._doc,
