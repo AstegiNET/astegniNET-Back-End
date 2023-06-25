@@ -5,11 +5,57 @@ const Tutee = require("../models/tuteeModel");
 
 // @desc    Get message
 const getAllMessages = asyncHandler(async (req, res) => {
+  if (!req.user) {
+    res.send("please login first");
+  }
+
   try {
-    const messages = await Message.find();
+    var messages = await Message.find();
     if (messages) {
+      messages = messages.reverse();
+      const uniqueMessages = [];
+      const uniqueMessageIds = [];
+
+      messages.forEach((item) => {
+        if (!uniqueMessageIds.includes(item.message_id)) {
+          uniqueMessageIds.push(item.message_id);
+          uniqueMessages.push(item);
+        }
+      });
+
+      const userMessage = uniqueMessages.filter(
+        (item) =>
+          item.sender.toString() === req.user.id.toString() ||
+          item.receiver.toString() === req.user.id.toString()
+      );
+
+      if (userMessage) {
+        const updatedMessage = await Promise.all(
+          userMessage.map(async (message) => {
+            var receiver;
+            var sender;
+            console.log(message.message_id.slice(0, 24));
+            console.log(message.sender);
+
+            if (message.message_id.slice(0, 24) === message.sender.toString()) {
+              sender = await Tutor.findById(message.sender.toString());
+              receiver = await Tutee.findById(message.receiver.toString());
+            } else {
+              sender = await Tutee.findById(message.sender.toString());
+              receiver = await Tutor.findById(message.receiver.toString());
+            }
+
+            return {
+              ...message._doc,
+              sender: sender,
+              receiver: receiver,
+            };
+          })
+        );
+
+        res.status(200).json(updatedMessage);
+      }
     }
-    res.status(200).json(messages);
   } catch (Error) {
     res.send(Error);
   }
