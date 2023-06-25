@@ -24,6 +24,7 @@ app.use("/api/admins", require("./routes/adminRoutes"));
 app.use("/api/courses", require("./routes/courseRoutes"));
 app.use("/api/request", require("./routes/requestRoutes"));
 app.use("/api/message", require("./routes/messageRoutes"));
+app.use("/api/rate", require("./routes/ratingRoute"));
 
 app.use("/api/payment", require("./routes/paymentRoutes"));
 app.use("/videocall", require("./routes/videoRoute"));

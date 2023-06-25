@@ -54,7 +54,7 @@ const userSchema = mongoose.Schema(
       type: [Number],
       default: [1],
     },
-
+    ratedTutee: { type: [mongoose.Schema.Types.ObjectId], ref: "Rating" },
     password: {
       type: String,
       required: [true, "Please add a password"],
