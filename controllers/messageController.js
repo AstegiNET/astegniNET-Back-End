@@ -19,22 +19,29 @@ const getAllMessages = asyncHandler(async (req, res) => {
 const getMessages = asyncHandler(async (req, res) => {
   try {
     const messages = await Message.find({ message_id: req.params.id });
-    // console.log(messages);
+
     if (messages) {
       const updatedMessage = await Promise.all(
         messages.map(async (message) => {
+          var receiver;
+          var sender;
+          if (message.message_id.slice(0, 24) === message.sender) {
+            sender = await Tutor.findById(message.sender);
+            receiver = await Tutee.findById(message.receiver);
+          } else {
+            sender = await Tutee.findById(message.sender);
+            receiver = await Tutor.findById(message.receiver);
+          }
           const tutorId = message.message_id.slice(0, 24);
           const tuteeId = message.message_id.slice(24, 48);
           const tutor = await Tutor.findById(tutorId);
           const tutee = await Tutee.findById(tuteeId);
-          console.log(tutor.fname);
+          console.log(sender);
 
           return {
             ...message._doc,
-            tutor_avatar: tutor.avatar,
-            tutee_avatar: tutee.avatar,
-            tutor_name: `${tutor.fname} ${tutor.lname}`,
-            tutee_name: `${tutee.fname} ${tutee.lname}`,
+            sender: sender,
+            receiver: receiver,
           };
         })
       );
