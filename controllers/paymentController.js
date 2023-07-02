@@ -84,6 +84,8 @@ const addPayment = asyncHandler(async (req, res) => {
       });
 
       if (enrollment) {
+        Request.findByIdAndDelete(request_id);
+
         await Tutee.findByIdAndUpdate(
           enrollment.tutee,
           {
