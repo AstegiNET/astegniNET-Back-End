@@ -36,6 +36,12 @@ const userSchema = mongoose.Schema(
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Enrollment",
     },
+
+    enrolledTutor: {
+      type: [mongoose.Schema.Types.ObjectId],
+      ref: "Tutor",
+    },
+
     enrolled: [
       {
         tutor: {
@@ -67,6 +73,8 @@ const userSchema = mongoose.Schema(
     },
     avatar: {
       type: String,
+      default:
+        "https://www.google.com/url?sa=i&url=https%3A%2F%2Fcreazilla.com%2Fnodes%2F3251108-person-icon&psig=AOvVaw13KGGbrS6vfbBuAxhl5urC&ust=1687601738037000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCLDGpNKU2f8CFQAAAAAdAAAAABAI",
     },
   },
   {

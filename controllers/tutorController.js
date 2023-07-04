@@ -41,6 +41,84 @@ const registerTutor = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Update tutor
+// @route   PUT /api/tutors
+// @access  Public
+const updateTutor = asyncHandler(async (req, res) => {
+  const { fname, lname, phone, email, salary, course, rating, password } =
+    req.body;
+  if (!fname || !lname || !phone || !email || !password || !salary) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
+
+  const tutorExists = await Tutor.findOne({ email });
+
+  if (tutorExists) {
+    res.status(400);
+    throw new Error("Tutor already exists");
+  }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
+
+  const tutor = await Tutor.create({
+    ...req.body,
+    password: hashedPassword,
+  });
+
+  if (tutor) {
+    res.status(201).json({
+      ...tutor._doc,
+      token: generateToken(tutor._id),
+    });
+  } else {
+    res.status(400);
+    throw new Error("Invalid tutor data");
+  }
+});
+
+// @desc    Update tutor
+// @route   PUT /api/tutors
+// @access  Public
+const rateTutor = asyncHandler(async (req, res) => {
+  const { rating } = req.body;
+  const tutee = req.user;
+  const tutor_id = req.params.id;
+
+  if (!rating) {
+    res.status(400);
+    throw new Error("Please add all fields");
+  }
+  if (!tutee) {
+    res.status(401);
+    throw new Error("please login as tutee");
+  }
+  const tutor = await Tutor.findById({ _id: tutor_id });
+  if (tutor) {
+    const tuteeExists = tutor.enrolledTutee.includes(tutee.id);
+    console.log(tuteeExists);
+    console.log(rating);
+
+    if (tuteeExists) {
+      const updatedTutor = await Tutor.findByIdAndUpdate(
+        tutor_id,
+        { $push: { rating: rating } },
+        { new: true }
+      );
+
+      console.log(updatedTutor);
+      res.status(200).json(updatedTutor);
+    } else {
+      res
+        .status(200)
+        .json({ message: "you are not allowed to update this tutor" });
+    }
+  } else {
+    res.status(200).json({ message: "there is not valid tutor" });
+  }
+});
+
 // @desc    Authenticate a tutor
 // @route   POST /api/tutors/login
 // @access  Public
@@ -219,6 +297,7 @@ module.exports = {
   loginTutor,
   getTutor,
   getTutors,
+  rateTutor,
   getTutorbyRating,
   getTutorbyName,
   getTutorbyCourse,

@@ -84,17 +84,24 @@ const addPayment = asyncHandler(async (req, res) => {
       });
 
       if (enrollment) {
+        Request.findByIdAndDelete(request_id);
+
         await Tutee.findByIdAndUpdate(
           enrollment.tutee,
           {
-            $push: { enrollement: enrollment._id },
+            $push: {
+              enrollement: enrollment._id,
+              enrolledTutor: enrollment.tutor,
+            },
           },
           { new: true }
         );
 
         await Tutor.findByIdAndUpdate(
           enrollment.tutor,
-          { $push: { tutee: enrollment._id } },
+          {
+            $push: { tutee: enrollment._id, enrolledTutee: enrollment.tutee },
+          },
           { new: true }
         );
         await Request.findByIdAndUpdate(

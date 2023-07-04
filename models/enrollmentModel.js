@@ -10,7 +10,7 @@ const enrollmentSchema = mongoose.Schema(
 
     tutee: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Tutor",
+      ref: "Tutee",
       required: true,
     },
     tutor: {

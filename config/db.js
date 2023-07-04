@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-//database connection 
+//database connection
 const connectDB = async () => {
   try {
     const uri = process.env.MGDB;
     await mongoose.connect(uri, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
+      family: 4,
     });
     console.log("successfully connected to mongodb");
   } catch (err) {
@@ -14,4 +15,3 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
-
