@@ -16,15 +16,6 @@ const miningSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [
-        "coal",
-        "lithium",
-        "safarem",
-        "opal",
-        "emerald",
-        "marble",
-        "granite",
-      ],
       required: [true, "Please add a type"],
     },
   },
